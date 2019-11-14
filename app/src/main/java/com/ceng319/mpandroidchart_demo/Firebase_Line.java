@@ -40,14 +40,14 @@ public class Firebase_Line extends AppCompatActivity {
     private int N = 20;
     String[] XLabels = new String[N];
     List<DataStructure> firebaseData = new ArrayList<>();
-    private boolean firstTimeDrawed;
+    private boolean firstTimeDrew;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_firebase__line);
         setupTitleandHomeButton();
-        firstTimeDrawed = false;
+        firstTimeDrew = false;
         // TODO 1: Find the chart
         linechart = findViewById(R.id.firebaseline_chart);
 
@@ -129,7 +129,7 @@ public class Firebase_Line extends AppCompatActivity {
                 // TODO 4: Now all the query data is in List firebaseData, Follow the similar procedure in Line activity.
                 drawGraph(firebaseData);
 
-                firstTimeDrawed = true;
+                firstTimeDrew = true;
             }
 
             @Override
@@ -184,7 +184,7 @@ public class Firebase_Line extends AppCompatActivity {
                     Log.d("MapleLeaf", "dataStructure " + dataStructure.getTimestamp());
                 }
                 // TODO: if already drew but still come to here, there is only one possibility that a new node is added to the database.
-                if (firstTimeDrawed)
+                if (firstTimeDrew)
                     drawGraph(firebaseData);
 
 

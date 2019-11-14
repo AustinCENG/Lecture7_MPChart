@@ -115,7 +115,7 @@ public class MainActivity extends AppCompatActivity
         // TODO: Builder in Java is a design pattern to set up complex objects. One general usage is to build a
         // TODO: Refer to here: https://dzone.com/articles/design-patterns-the-builder-pattern
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this)
-                                         .setMessage("Do you know winter registration starts from Nov. 19?")
+                                         .setMessage(getString(R.string.message))
                                         .setCancelable(false)
                                         .setTitle("Reminder");
         builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {

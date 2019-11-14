@@ -3,14 +3,15 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_headelocal_pier_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_subtitle">testcode@google.com</string>
     <string name="nav_header_desc">Navigation header</string>
      <string name="action_quit">Quit</string>
-    <string name="comments">This is a demo to show the MPChart Application in Android, try to use different menu options from the navigation drawer</string>
+    <string name="comments">This is a demo to show the MPChart Application in Android. \n\nPlease try to use different menu options from the navigation drawer</string>
     <string name="local_pie">Pie Chart - Local Random Data</string>
     <string name="pie">Pie Chart</string>
     <string name="temperature">Temperature</string>
     <string name="local_bar">Bar Chart - Data from Firebase</string>
     <string name="firebase_line">Line Chart - Data from Firebase</string>
     <string name="local_line">Line Chart - Local Data</string>
+    <string name="message">Do you know winter registration starts from Nov. 19? \n\nDo you know if you register CENG 355, you need to register the same session with your teammates in CENG 319?</string>
 </resources>
