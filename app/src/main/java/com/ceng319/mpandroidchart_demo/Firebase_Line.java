@@ -61,13 +61,21 @@ public class Firebase_Line extends AppCompatActivity {
 
     }
 
-    private void drawGraph(List<DataStructure> dataGenerated) {
+    private void drawGraph() {
 
+        if (firebaseData.size() > N)  // Should have a guard to make sure we always draw the most recent N numbers.
+            firebaseData = firebaseData.subList(firebaseData.size()-N, firebaseData.size());
 
         Collections.sort(firebaseData);
         for (int i=0; i< firebaseData.size(); i++){
             // TODO: Define the XLabels of the chart.
-            XLabels[i] = convertTimestamp(firebaseData.get(i).getTimestamp());
+            try{
+               // XLabels[i] = firebaseData.get(i).getTimestamp();
+              XLabels[i] = convertTimestamp(firebaseData.get(i).getTimestamp());
+            }
+            catch (Exception e){
+                Log.d("MapleLeaf", "Error Happened: " + e.getMessage());
+            }
         }
         // TODO: Set text description of the xAxis
         Description desc = new Description();
@@ -84,7 +92,7 @@ public class Firebase_Line extends AppCompatActivity {
         int i = 0;
         List<Entry> entrylist = new ArrayList();
         // TODO: Entry is the element of the data input to the chart. All the data should be organized as Entries' ArrayList
-        for (DataStructure ds: dataGenerated){
+        for (DataStructure ds: firebaseData){
             // Get the humidity from the firebase.
             Entry e = new Entry (i++, Float.parseFloat(ds.getHumidity()));
             entrylist.add(e);
@@ -110,6 +118,8 @@ public class Firebase_Line extends AppCompatActivity {
         xAxis.setValueFormatter(new IAxisValueFormatter(){
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
+                // Seems to be a bug in the code value should not be less than 0 or more than N-1
+                if ((value <0) || (value >N-1))return "";
                 return XLabels[(int) value];
             }
         });
@@ -120,14 +130,14 @@ public class Firebase_Line extends AppCompatActivity {
     private void loadDatabase(DatabaseReference ref) {
         // Last N data entries from Database, these are automatically the N most recent data
 
-        Query recentPostsQuery = ref.limitToFirst(N);
+        Query recentPostsQuery = ref.limitToLast(N);  // get the most recent N data
         // NOTICE: Firebase Value event is always called after the ChildAdded event.
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Log.d("MapleLeaf", "finished");
                 // TODO 4: Now all the query data is in List firebaseData, Follow the similar procedure in Line activity.
-                drawGraph(firebaseData);
+                drawGraph();
 
                 firstTimeDrew = true;
             }
@@ -158,13 +168,13 @@ public class Firebase_Line extends AppCompatActivity {
                             updated = true;
                         }
                     }
-                    if (!updated)
-                        firebaseData.add(dataStructure);  // now all the data is in arraylist.
+
+                    firebaseData.add(dataStructure);  // now all the data is in arraylist.
 
                     Log.d("MapleLeaf", "dataStructure at " + dataStructure.getTimestamp() + " Updated");
                 }
                 // TODO 4: Now all the query data is in List firebaseData, Follow the similar procedure in Line activity.
-                drawGraph(firebaseData);
+                drawGraph();
             }
 
             @Override
@@ -183,9 +193,17 @@ public class Firebase_Line extends AppCompatActivity {
                     firebaseData.add(dataStructure);  // now all the data is in arraylist.
                     Log.d("MapleLeaf", "dataStructure " + dataStructure.getTimestamp());
                 }
-                // TODO: if already drew but still come to here, there is only one possibility that a new node is added to the database.
-                if (firstTimeDrew)
-                    drawGraph(firebaseData);
+                try{
+                    // TODO: if already drew but still come to here, there is only one possibility that a new node is added to the database.
+                    if (firstTimeDrew)
+                        drawGraph();
+                }
+                catch (Error e){
+                    Log.d("MapleLeaf", "Error Happened: " + e.getMessage());
+
+
+                }
+
 
 
             }

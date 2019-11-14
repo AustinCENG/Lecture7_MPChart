@@ -61,14 +61,19 @@ public class Firebase_Bar extends AppCompatActivity {
 
     }
 
-    private void drawGraph(List<DataStructure> dataGenerated) {
+    private void drawGraph() {
+        if (firebaseData.size() > N)  // Should have a guard to make sure we always draw the most recent N numbers.
+            firebaseData = firebaseData.subList(firebaseData.size()-N, firebaseData.size());
+
+
         // TODO: Set text description of the xAxis
+
         Description desc = new Description();
         desc.setText("BarChart from Firebase");
         desc.setTextSize(15);
         desc.setPosition(700,100);
         barchart.setDescription(desc);
-        barchart.animateXY(2000,2000);
+       // barchart.animateXY(2000,2000);
         // TODO: Set the X-axis labels
         setAndValidateLabels();
 
@@ -76,7 +81,7 @@ public class Firebase_Bar extends AppCompatActivity {
         int i = 0;
         List<BarEntry> entrylist = new ArrayList();
         // TODO: Entry is the element of the data input to the chart. All the data should be organized as Entries' ArrayList
-        for (DataStructure ds: dataGenerated){
+        for (DataStructure ds: firebaseData){
             BarEntry e = new BarEntry (i++, Float.parseFloat(ds.getTemperature()));
             entrylist.add(e);
         }
@@ -101,6 +106,9 @@ public class Firebase_Bar extends AppCompatActivity {
         xAxis.setValueFormatter(new IAxisValueFormatter(){
             @Override
             public String getFormattedValue(float value, AxisBase axis) {
+                // Seems to be a bug in the library code value should not be less than 0 or more than N-1.
+                // When asking for the most recent data.
+                if ((value <0) || (value > N-1))return "";
                 return XLabels[(int) value];
             }
         });
@@ -109,7 +117,7 @@ public class Firebase_Bar extends AppCompatActivity {
 
     private void loadDatabase(DatabaseReference ref) {
         // Last N data entries from Database, these are automatically the N most recent data
-        Query recentPostsQuery = ref.limitToFirst(N).orderByChild("timestamp");
+        Query recentPostsQuery = ref.limitToLast(N).orderByChild("timestamp");
 
         // NOTICE: Firebase Value event is always called after the ChildAdded event.
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -123,7 +131,7 @@ public class Firebase_Bar extends AppCompatActivity {
                }
 
                 // TODO 4: Now all the query data is in List firebaseData, Follow the similar procedure in Line activity.
-                drawGraph(firebaseData);
+                drawGraph();
                 firstTimeDrew = true;
             }
 
@@ -150,7 +158,7 @@ public class Firebase_Bar extends AppCompatActivity {
                 }
                 // TODO: if already drew but still come to here, there is only one possibility that a new node is added to the database.
                 if (firstTimeDrew)
-                    drawGraph(firebaseData);
+                    drawGraph();
             }
 
 
@@ -180,7 +188,7 @@ public class Firebase_Bar extends AppCompatActivity {
                     Log.d("MapleLeaf", "dataStructure at " + dataStructure.getTimestamp() + " Updated");
                 }
                 // TODO 4: Now all the query data is in List firebaseData, Follow the similar procedure in Line activity.
-                drawGraph(firebaseData);
+                drawGraph();
             }
 
             @Override
