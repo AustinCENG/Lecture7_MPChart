@@ -203,7 +203,7 @@ public class Firebase_Bar extends AppCompatActivity {
     private String convertTimestamp(String timestamp){
 
         // Convert timestamp to text.
-        long yourSeconds = Long.valueOf(timestamp);
+        long yourSeconds = (long)Double.parseDouble(timestamp);
         Date mDate = new Date(yourSeconds*1000);
         DateFormat df = new SimpleDateFormat("dd MMM yyyy");
         // df.setTimeZone(TimeZone.getTimeZone("Etc/GMT-5"));
