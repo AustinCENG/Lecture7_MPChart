@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">MPAndroidChart_Demo</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_headelocal_pier_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+     <string name="action_quit">Quit</string>
+    <string name="comments">This is a demo to show how MPChart Application in Android, try to use different menu options from the navigation drawer</string>
+    <string name="local_pie">Pie Chart - Local Random Data</string>
+    <string name="pie">Pie Chart</string>
+    <string name="temperature">Temperature</string>
+    <string name="local_bar">Bar Chart - Data from Firebase</string>
+    <string name="firebase_line">Line Chart - Data from Firebase</string>
+    <string name="local_line">Line Chart - Local Data</string>
+</resources>
