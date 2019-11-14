@@ -58,7 +58,6 @@ public class Pie extends AppCompatActivity {
         desc.setTextSize(34);
         piechart.setDescription(desc);
          piechart.animateXY(1000,1000);
-      //  piechart.animateY(1000);
         // TODO: Set PieDataSet
         PieDataSet dataset = new PieDataSet(dataGenerated, getString(R.string.temperature));
         // TODO: Set Table Colors.
