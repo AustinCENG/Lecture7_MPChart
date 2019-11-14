@@ -108,9 +108,6 @@ public class Firebase_Bar extends AppCompatActivity {
 
     private void loadDatabase(DatabaseReference ref) {
         // Last N data entries from Database, these are automatically the N most recent data
-
-
-
         Query recentPostsQuery = ref.limitToFirst(N).orderByChild("timestamp");
 
         // NOTICE: Firebase Value event is always called after the ChildAdded event.

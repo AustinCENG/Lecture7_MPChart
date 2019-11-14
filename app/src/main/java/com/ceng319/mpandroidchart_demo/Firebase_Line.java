@@ -28,6 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -39,12 +40,14 @@ public class Firebase_Line extends AppCompatActivity {
     private int N = 20;
     String[] XLabels = new String[N];
     List<DataStructure> firebaseData = new ArrayList<>();
+    private boolean firstTimeDrawed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_firebase__line);
         setupTitleandHomeButton();
+        firstTimeDrawed = false;
         // TODO 1: Find the chart
         linechart = findViewById(R.id.firebaseline_chart);
 
@@ -59,6 +62,9 @@ public class Firebase_Line extends AppCompatActivity {
     }
 
     private void drawGraph(List<DataStructure> dataGenerated) {
+
+
+        Collections.sort(firebaseData);
         for (int i=0; i< firebaseData.size(); i++){
             // TODO: Define the XLabels of the chart.
             XLabels[i] = convertTimestamp(firebaseData.get(i).getTimestamp());
@@ -120,10 +126,10 @@ public class Firebase_Line extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Log.d("MapleLeaf", "finished");
-
-
                 // TODO 4: Now all the query data is in List firebaseData, Follow the similar procedure in Line activity.
                 drawGraph(firebaseData);
+
+                firstTimeDrawed = true;
             }
 
             @Override
@@ -131,17 +137,41 @@ public class Firebase_Line extends AppCompatActivity {
 
             }
         });
-
         recentPostsQuery.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                if (dataSnapshot != null && dataSnapshot.getValue() != null) {
+                    // TODO: handle all the returned data. Similar to the Firebase read structure event.
+                    // TODO: This part of the code is to handle if there is any data changed on Firebase.
+                    DataStructure dataStructure = new DataStructure();
+                    dataStructure.setName(dataSnapshot.getValue(DataStructure.class).getName());
+                    dataStructure.setTemperature(dataSnapshot.getValue(DataStructure.class).getTemperature());
+                    dataStructure.setHumidity(dataSnapshot.getValue(DataStructure.class).getHumidity());
+                    dataStructure.setMessage(dataSnapshot.getValue(DataStructure.class).getMessage());
+                    String timestamp = dataSnapshot.getValue(DataStructure.class).getTimestamp();
+                    dataStructure.setTimestamp(timestamp);
+                    boolean updated = false;
+                    for (int i = 0; i<firebaseData.size(); i++){
+                        if (firebaseData.get(i).getTimestamp().equals(dataStructure.getTimestamp()))
+                        {
+                            firebaseData.set(i, dataStructure);
+                            updated = true;
+                        }
+                    }
+                    if (!updated)
+                        firebaseData.add(dataStructure);  // now all the data is in arraylist.
 
+                    Log.d("MapleLeaf", "dataStructure at " + dataStructure.getTimestamp() + " Updated");
+                }
+                // TODO 4: Now all the query data is in List firebaseData, Follow the similar procedure in Line activity.
+                drawGraph(firebaseData);
             }
 
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 if (dataSnapshot != null && dataSnapshot.getValue() != null) {
                     // TODO: handle all the returned data. Similar to the Firebase read structure event.
+                    // TODO: This part of the code is to handle the new data is added to the code.
                     DataStructure dataStructure = new DataStructure();
                     dataStructure.setName(dataSnapshot.getValue(DataStructure.class).getName());
                     dataStructure.setTemperature(dataSnapshot.getValue(DataStructure.class).getTemperature());
@@ -153,6 +183,11 @@ public class Firebase_Line extends AppCompatActivity {
                     firebaseData.add(dataStructure);  // now all the data is in arraylist.
                     Log.d("MapleLeaf", "dataStructure " + dataStructure.getTimestamp());
                 }
+                // TODO: if already drew but still come to here, there is only one possibility that a new node is added to the database.
+                if (firstTimeDrawed)
+                    drawGraph(firebaseData);
+
+
             }
 
             @Override
