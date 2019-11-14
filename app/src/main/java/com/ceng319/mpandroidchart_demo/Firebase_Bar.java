@@ -73,7 +73,7 @@ public class Firebase_Bar extends AppCompatActivity {
         desc.setTextSize(15);
         desc.setPosition(700,100);
         barchart.setDescription(desc);
-       // barchart.animateXY(2000,2000);
+        barchart.animateXY(2000,2000);
         // TODO: Set the X-axis labels
         setAndValidateLabels();
 
