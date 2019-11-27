@@ -13,5 +13,5 @@
     <string name="local_bar">Bar Chart - Data from Firebase</string>
     <string name="firebase_line">Line Chart - Data from Firebase</string>
     <string name="local_line">Line Chart - Local Data</string>
-    <string name="message">Do you know winter registration starts from Nov. 19? \n\nDo you know if you register CENG 355, you need to register the same session with your teammates in CENG 319?</string>
+    <string name="message">Do you know if you register CENG 355, you need to register the same session with your teammates in CENG 319?</string>
 </resources>

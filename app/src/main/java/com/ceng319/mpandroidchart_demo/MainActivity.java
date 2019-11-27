@@ -117,8 +117,8 @@ public class MainActivity extends AppCompatActivity
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this)
                                          .setMessage(getString(R.string.message))
                                         .setCancelable(false)
-                                        .setTitle("Reminder");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                                        .setTitle("Reminder")
+                                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // Do something when click positive button
